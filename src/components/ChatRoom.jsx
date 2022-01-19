@@ -18,7 +18,8 @@ function ChatRoom({ firebase, firestore, auth, user }) {
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    console.log('Sending a message ... ');
+    if (formValue.trim() === '') return;
+
     const { uid, photoURL } = auth.currentUser;
 
     await messageRef.add({
