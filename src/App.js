@@ -21,10 +21,22 @@ const firestore = firebase.firestore();
 function App() {
   const [user] = useAuthState(auth);
   console.log(user);
+
   return (
     <div className="App">
       <header className="App-header">Firebase Chat-App.</header>
-      <section>{user ? <ChatRoom /> : <SignUp />}</section>
+      <section>
+        {user ? (
+          <ChatRoom
+            firebase={firebase}
+            firestore={firestore}
+            auth={auth}
+            user={user}
+          />
+        ) : (
+          <SignUp firebase={firebase} auth={auth} />
+        )}
+      </section>
     </div>
   );
 }
