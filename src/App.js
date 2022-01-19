@@ -19,7 +19,7 @@ const firestore = firebase.firestore();
 
 function App() {
   const [user] = useAuthState(auth);
-  console.log(user);
+  //console.log(user);
 
   return (
     <div className="App">
@@ -27,7 +27,7 @@ function App() {
         <h1>GroupyChat⚛️💬</h1>
         <SignOut auth={auth} />
       </header>
-      <section>
+      <section className="App-main">
         {user ? (
           <ChatRoom
             firebase={firebase}

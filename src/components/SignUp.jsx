@@ -4,9 +4,30 @@ function SignUp({ firebase, auth }) {
     auth.signInWithPopup(provider);
   };
   return (
-    <div>
-      <p>Signup to continue!</p>
-      <button onClick={signUpWithGoogle}>SignUpWithGoogle</button>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        color: 'white',
+      }}
+    >
+      <h3>SignIn to continue!</h3>
+      <button
+        onClick={signUpWithGoogle}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center',
+        }}
+      >
+        <img src={'https://freesvg.org/img/1534129544.png'} />
+        Continue with Google
+      </button>
+      <p>By signing in, you agreed to respect other group members.</p>
     </div>
   );
 }

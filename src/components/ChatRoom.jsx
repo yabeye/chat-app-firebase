@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 function ChatRoom({ firebase, firestore, auth, user }) {
+  const scrollPlaceHolder = useRef();
   const messageRef = firestore.collection('messages');
   const query = messageRef.orderBy('createdAt').limit(25);
   const [messages] = useCollectionData(query);
 
-  const [formValue, setFormValue] = useState('start');
+  const [formValue, setFormValue] = useState('');
+
+  useEffect(() => {
+    scrollPlaceHolder.current.scrollIntoView({
+      behavior: 'smooth',
+    });
+  });
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -23,12 +30,19 @@ function ChatRoom({ firebase, firestore, auth, user }) {
   };
 
   return (
-    <main>
-      {messages &&
-        messages.map((message) => (
-          <ChatMessage key={message.createdAt} user={user} message={message} />
-        ))}
-
+    <>
+      <main>
+        {messages &&
+          messages.map((message) => (
+            <ChatMessage
+              key={message.createdAt}
+              user={user}
+              message={message}
+              auth={auth}
+            />
+          ))}
+        <div ref={scrollPlaceHolder}></div>
+      </main>
       <form onSubmit={sendMessage}>
         <input
           value={formValue}
@@ -37,17 +51,37 @@ function ChatRoom({ firebase, firestore, auth, user }) {
         />
         <button type="submit">Send</button>
       </form>
-    </main>
+    </>
   );
 }
 
 function ChatMessage(props) {
-  const { text, createdAt, photoURL } = props.message;
+  const { text, createdAt, photoURL, uid, auth } = props.message;
+
+  //const messageClass = auth.currentUser.uid === uid ? 'sent' : 'received';
+  var formattedTime = 'just now';
+  if (createdAt) {
+    const date = new Date(createdAt.seconds * 1000);
+    var hours = date.getHours();
+    var minutes = '0' + date.getMinutes();
+    formattedTime =
+      hours +
+      ':' +
+      minutes.slice(-2) +
+      ' ' +
+      date.getDate() +
+      ',' +
+      date.toLocaleString('default', { month: 'long' }).substring(0, 3) +
+      date.getFullYear().toString().slice(-2);
+  }
+
   return (
-    <div>
-      <img src={photoURL} alt={'P'} />
-      <p>{text}</p>
-      <p>{'11:46 AM'}</p>
+    <div className={`message ${'sent'}`}>
+      <img src={photoURL} alt={'Pf'} />
+      <div className="message-group">
+        <p className="text">{text}</p>
+        <p className="timestamp">{formattedTime}</p>
+      </div>
     </div>
   );
 }
