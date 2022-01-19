@@ -1,12 +1,4 @@
 function SignUp({ firebase, auth }) {
-  const flexStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-    color: 'white',
-  };
   const signUpWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);

@@ -2,9 +2,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-// this is just a temporary solution to hide the config
-import { firebaseConfig } from './config/firebaseConfig';
-
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import ChatRoom from './components/ChatRoom';
@@ -12,7 +9,9 @@ import SignUp from './components/SignUp';
 
 import './App.css';
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp({
+  // your config.
+});
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();

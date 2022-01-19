@@ -4,7 +4,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 function ChatRoom({ firebase, firestore, auth, user }) {
   const scrollPlaceHolder = useRef();
   const messageRef = firestore.collection('messages');
-  const query = messageRef.orderBy('createdAt', 'desc').limit(25);
+  const query = messageRef.orderBy('createdAt').limit(1000);
   const [messages] = useCollectionData(query);
   const [formValue, setFormValue] = useState('');
 
@@ -38,16 +38,14 @@ function ChatRoom({ firebase, firestore, auth, user }) {
           <p style={{ color: 'white' }}>Write the first message!</p>
         )}
         {messages &&
-          messages
-            .reverse()
-            .map((message) => (
-              <ChatMessage
-                key={message.createdAt}
-                user={user}
-                message={message}
-                currentUser={auth.currentUser}
-              />
-            ))}
+          messages.map((message) => (
+            <ChatMessage
+              key={message.createdAt}
+              user={user}
+              message={message}
+              currentUser={auth.currentUser}
+            />
+          ))}
         <div ref={scrollPlaceHolder}></div>
       </main>
       <form onSubmit={sendMessage}>
@@ -85,7 +83,13 @@ function ChatMessage(props) {
 
   return (
     <div className={`message ${messageClass}`}>
-      <img src={photoURL} alt={'Pf'} />
+      <img
+        src={
+          photoURL ||
+          'https://cdn.pixabay.com/photo/2013/07/13/13/38/man-161282_960_720.png'
+        }
+        alt={'Pf'}
+      />
       <div className="message-group">
         <p className="text">{text}</p>
         <p className="timestamp">{formattedTime}</p>
