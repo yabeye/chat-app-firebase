@@ -19,12 +19,12 @@ const firestore = firebase.firestore();
 
 function App() {
   const [user] = useAuthState(auth);
-  //console.log(user);
+  //console.log('auth at app', auth.currentUser.displayName);
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>GroupyChat⚛️💬</h1>
+        <h2>GroupyChat⚛️💬</h2>
         <SignOut auth={auth} />
       </header>
       <section className="App-main">

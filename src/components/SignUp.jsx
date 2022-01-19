@@ -1,4 +1,12 @@
 function SignUp({ firebase, auth }) {
+  const flexStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    color: 'white',
+  };
   const signUpWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);
@@ -19,12 +27,14 @@ function SignUp({ firebase, auth }) {
         onClick={signUpWithGoogle}
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          flexDirection: 'row',
           alignItems: 'center',
-          alignContent: 'center',
         }}
       >
-        <img src={'https://freesvg.org/img/1534129544.png'} />
+        <img
+          src={'https://freesvg.org/img/1534129544.png'}
+          alt={'GoogleLogo'}
+        />
         Continue with Google
       </button>
       <p>By signing in, you agreed to respect other group members.</p>

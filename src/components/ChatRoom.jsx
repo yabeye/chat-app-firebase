@@ -4,7 +4,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 function ChatRoom({ firebase, firestore, auth, user }) {
   const scrollPlaceHolder = useRef();
   const messageRef = firestore.collection('messages');
-  const query = messageRef.orderBy('createdAt').limit(25);
+  const query = messageRef.orderBy('createdAt').limit(100);
   const [messages] = useCollectionData(query);
 
   const [formValue, setFormValue] = useState('');
@@ -18,7 +18,9 @@ function ChatRoom({ firebase, firestore, auth, user }) {
   const sendMessage = async (e) => {
     e.preventDefault();
 
+    console.log('Sending a message ... ');
     const { uid, photoURL } = auth.currentUser;
+
     await messageRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -38,7 +40,7 @@ function ChatRoom({ firebase, firestore, auth, user }) {
               key={message.createdAt}
               user={user}
               message={message}
-              auth={auth}
+              currentUser={auth.currentUser}
             />
           ))}
         <div ref={scrollPlaceHolder}></div>
@@ -49,16 +51,17 @@ function ChatRoom({ firebase, firestore, auth, user }) {
           placeholder="say something nice"
           onChange={(e) => setFormValue(e.target.value)}
         />
-        <button type="submit">Send</button>
+        <button type="submit">🚀</button>
       </form>
     </>
   );
 }
 
 function ChatMessage(props) {
-  const { text, createdAt, photoURL, uid, auth } = props.message;
+  const { text, createdAt, photoURL, uid } = props.message;
+  const { currentUser } = props;
 
-  //const messageClass = auth.currentUser.uid === uid ? 'sent' : 'received';
+  const messageClass = currentUser.uid === uid ? 'sent' : 'received';
   var formattedTime = 'just now';
   if (createdAt) {
     const date = new Date(createdAt.seconds * 1000);
@@ -76,7 +79,7 @@ function ChatMessage(props) {
   }
 
   return (
-    <div className={`message ${'sent'}`}>
+    <div className={`message ${messageClass}`}>
       <img src={photoURL} alt={'Pf'} />
       <div className="message-group">
         <p className="text">{text}</p>
