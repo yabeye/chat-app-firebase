@@ -6,7 +6,6 @@ import 'firebase/compat/firestore';
 import { firebaseConfig } from './config/firebaseConfig';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import ChatRoom from './components/ChatRoom';
 import SignUp from './components/SignUp';
@@ -24,7 +23,10 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">Firebase Chat-App.</header>
+      <header className="App-header">
+        <h1>GroupyChat⚛️💬</h1>
+        <SignOut auth={auth} />
+      </header>
       <section>
         {user ? (
           <ChatRoom
@@ -41,4 +43,9 @@ function App() {
   );
 }
 
+function SignOut({ auth }) {
+  return (
+    auth.currentUser && <button onClick={() => auth.signOut()}>SignOut</button>
+  );
+}
 export default App;
