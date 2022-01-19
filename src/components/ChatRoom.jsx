@@ -4,9 +4,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 function ChatRoom({ firebase, firestore, auth, user }) {
   const scrollPlaceHolder = useRef();
   const messageRef = firestore.collection('messages');
-  const query = messageRef.orderBy('createdAt').limit(100);
+  const query = messageRef.orderBy('createdAt', 'desc').limit(25);
   const [messages] = useCollectionData(query);
-
   const [formValue, setFormValue] = useState('');
 
   useEffect(() => {
@@ -35,15 +34,20 @@ function ChatRoom({ firebase, firestore, auth, user }) {
   return (
     <>
       <main>
+        {messages && messages.length === 0 && (
+          <p style={{ color: 'white' }}>Write the first message!</p>
+        )}
         {messages &&
-          messages.map((message) => (
-            <ChatMessage
-              key={message.createdAt}
-              user={user}
-              message={message}
-              currentUser={auth.currentUser}
-            />
-          ))}
+          messages
+            .reverse()
+            .map((message) => (
+              <ChatMessage
+                key={message.createdAt}
+                user={user}
+                message={message}
+                currentUser={auth.currentUser}
+              />
+            ))}
         <div ref={scrollPlaceHolder}></div>
       </main>
       <form onSubmit={sendMessage}>
